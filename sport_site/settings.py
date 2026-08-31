@@ -56,10 +56,11 @@ ROOT_URLCONF = 'sport_site.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
-        'APP_DIRS': True,
+        'DIRS': [],  # здесь можно указать дополнительные пути, но оставьте пустым
+        'APP_DIRS': True,  # <-- убедитесь, что здесь True
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
