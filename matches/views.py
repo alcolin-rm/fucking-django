@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
-from django.db.models import Q
-from .models import Match
+from django.db.models import Q, Count
+from .models import Match, SportTournament
 
 # Страница отдельного матча
 def match_detail(request, id):
@@ -38,4 +38,25 @@ def matches_future(request):
     return render(request, 'matches/match_list.html', {
         'matches': matches,
         'title': 'Будущие матчи',
+    })
+def tournaments_list(request):
+    """Список всех турниров с количеством завершённых матчей"""
+    now = timezone.now()
+    # Аннотируем каждый турнир количеством матчей, у которых end_time <= now (завершённые)
+    tournaments = SportTournament.objects.annotate(
+        finished_matches=Count('match', filter=Q(match__end_time__lte=now))
+    ).order_by('-start_date')  # сначала новые
+    return render(request, 'matches/tournaments_list.html', {
+        'tournaments': tournaments,
+        'title': 'Турниры',
+    })
+
+def tournament_detail(request, id):
+    """Страница отдельного турнира со списком его матчей"""
+    tournament = get_object_or_404(SportTournament, id=id)
+    # Матчи турнира, отсортированные по времени начала (от ранних к поздним)
+    matches = tournament.match_set.all().order_by('start_time')
+    return render(request, 'matches/tournament_detail.html', {
+        'tournament': tournament,
+        'matches': matches,
     })

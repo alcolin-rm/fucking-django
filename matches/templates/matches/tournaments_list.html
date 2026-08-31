@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Турниры</title>
+</head>
+<body>
+    <h1>Турниры</h1>
+    <nav>
+        <a href="{% url 'matches:matches_list' %}">Все матчи</a> |
+        <a href="{% url 'matches:matches_live' %}">Live</a> |
+        <a href="{% url 'matches:matches_future' %}">Будущие</a> |
+        <a href="{% url 'matches:tournaments_list' %}">Турниры</a>
+    </nav>
+
+    {% if tournaments %}
+        <ul>
+            {% for tournament in tournaments %}
+                <li>
+                    <a href="{% url 'matches:tournament_detail' tournament.id %}">
+                        {{ tournament.name }}
+                    </a>
+                    (завершённых матчей: {{ tournament.finished_matches }})
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Турниров пока нет.</p>
+    {% endif %}
+</body>
+</html>

@@ -14,7 +14,8 @@
     <nav>
         <a href="{% url 'matches:matches_list' %}">Все</a> |
         <a href="{% url 'matches:matches_live' %}">Live</a> |
-        <a href="{% url 'matches:matches_future' %}">Будущие</a>
+        <a href="{% url 'matches:matches_future' %}">Будущие</a> |
+        <a href="{% url 'matches:tournaments_list' %}">Турниры</a>
     </nav>
 
     {% if matches %}
@@ -27,7 +28,15 @@
                     <th>Локация</th>
                     <th>Начало</th>
                     <th>Окончание</th>
-                    <th>Турнир</th>
+                    <td>
+                    {% if match.tournament %}
+                        <a href="{% url 'matches:tournament_detail' match.tournament.id %}">
+                            {{ match.tournament.name }}
+                        </a>
+                    {% else %}
+                        —
+                    {% endif %}
+                    </td>
                     <th>Детали</th>
                 </tr>
             </thead>
