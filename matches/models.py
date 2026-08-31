@@ -16,10 +16,20 @@ class Player(models.Model):
         verbose_name_plural = "Игроки"
 
 
+class SportTournament(models.Model):
+    name = models.CharField(max_length=200, verbose_name="Название")
+    start_date = models.DateField(verbose_name="Дата начала")
+    end_date = models.DateField(verbose_name="Дата окончания")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = "Турнир"
+        verbose_name_plural = "Турниры"
+
+
 class Match(models.Model):
-    """
-    Модель матча.
-    """
     location = models.CharField(max_length=200, verbose_name="Локация")
     start_time = models.DateTimeField(verbose_name="Время начала", null=True, blank=True)
     end_time = models.DateTimeField(verbose_name="Время конца", null=True, blank=True)
@@ -33,6 +43,14 @@ class Match(models.Model):
         null=True,
         verbose_name="Победитель",
         help_text="Оставьте пустым для несостоявшихся матчей"
+    )
+    
+    tournament = models.ForeignKey(
+        SportTournament,
+        on_delete=models.SET_NULL,   
+        null=True,
+        blank=True,
+        verbose_name="Турнир"
     )
 
     def __str__(self):

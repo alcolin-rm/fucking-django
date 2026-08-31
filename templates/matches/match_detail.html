@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Матч {{ match.team1 }} vs {{ match.team2 }}</title>
+</head>
+<body>
+    <h1>{{ match.team1 }} – {{ match.team2 }}</h1>
+    <p><strong>Локация:</strong> {{ match.location }}</p>
+    <p><strong>Начало:</strong> {{ match.start_time|default:"не указано" }}</p>
+    <p><strong>Окончание:</strong> {{ match.end_time|default:"не указано" }}</p>
+    <p><strong>Счёт:</strong> {{ match.score1 }} : {{ match.score2 }}</p>
+    <p><strong>Победитель:</strong> {{ match.winner|default:"ещё не определён" }}</p>
+    
+    {% if match.tournament %}
+        <hr>
+        <h2>Турнир</h2>
+        <p><strong>Название:</strong> {{ match.tournament.name }}</p>
+        <p><strong>Даты:</strong> с {{ match.tournament.start_date }} по {{ match.tournament.end_date }}</p>
+    {% else %}
+        <p><em>Матч не привязан к турниру</em></p>
+    {% endif %}
+
+    <p><a href="{% url 'admin:matches_match_change' match.id %}">Редактировать в админке</a></p>
+</body>
+</html>
