@@ -33,9 +33,9 @@
                         <a href="{% url 'matches:tournament_detail' match.tournament.id %}">
                             {{ match.tournament.name }}
                         </a>
-                    {% else %}
+                        {% else %}
                         —
-                    {% endif %}
+                        {% endif %}
                     </td>
                     <th>Детали</th>
                 </tr>
@@ -51,6 +51,20 @@
                         <td>{{ match.end_time|date:"d.m.Y H:i"|default:"—" }}</td>
                         <td>{{ match.tournament.name|default:"—" }}</td>
                         <td><a href="{% url 'matches:match_detail' match.id %}">Подробнее</a></td>
+                        {% if match.tournament %}
+                            <a href="{% url 'matches:tournament_detail' match.tournament.id %}">
+                            {{ match.tournament.name }}
+                        </a>
+                        {% else %}
+                —
+            {% endif %}
+        </td>
+        <td><a href="{% url 'matches:match_detail' match.id %}">Подробнее</a></td>
+    </tr>
+{% endfor %}
+                    
+                    
+                    
                     </tr>
                 {% endfor %}
             </tbody>

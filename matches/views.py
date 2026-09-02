@@ -3,12 +3,10 @@ from django.utils import timezone
 from django.db.models import Q, Count
 from .models import Match, SportTournament
 
-# Страница отдельного матча
 def match_detail(request, id):
     match = get_object_or_404(Match, id=id)
     return render(request, 'matches/match_detail.html', {'match': match})
 
-# Список всех матчей (от новых к старым)
 def matches_list(request):
     matches = Match.objects.all().order_by('-start_time')
     return render(request, 'matches/match_list.html', {
@@ -16,7 +14,6 @@ def matches_list(request):
         'title': 'Все матчи',
     })
 
-# Матчи, идущие сейчас (live)
 def matches_live(request):
     now = timezone.now()
     matches = Match.objects.filter(
@@ -29,7 +26,6 @@ def matches_live(request):
         'title': 'Матчи в прямом эфире',
     })
 
-# Будущие матчи (ещё не начались)
 def matches_future(request):
     now = timezone.now()
     matches = Match.objects.filter(
@@ -39,23 +35,21 @@ def matches_future(request):
         'matches': matches,
         'title': 'Будущие матчи',
     })
+
 def tournaments_list(request):
-    """Список всех турниров с количеством завершённых матчей"""
+
     now = timezone.now()
-    # Аннотируем каждый турнир количеством матчей, у которых end_time <= now (завершённые)
     tournaments = SportTournament.objects.annotate(
         finished_matches=Count('match', filter=Q(match__end_time__lte=now))
-    ).order_by('-start_date')  # сначала новые
+    ).order_by('-start_date')
     return render(request, 'matches/tournaments_list.html', {
         'tournaments': tournaments,
-        'title': 'Турниры',
     })
 
 def tournament_detail(request, id):
-    """Страница отдельного турнира со списком его матчей"""
+
     tournament = get_object_or_404(SportTournament, id=id)
-    # Матчи турнира, отсортированные по времени начала (от ранних к поздним)
-    matches = tournament.match_set.all().order_by('start_time')
+    matches = tournament.match_set.all().order_by('start_time')  
     return render(request, 'matches/tournament_detail.html', {
         'tournament': tournament,
         'matches': matches,

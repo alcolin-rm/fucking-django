@@ -15,11 +15,10 @@
     <hr>
         <h2>Турнир</h2>
         <p><strong>Название:</strong> <a href="{% url 'matches:tournament_detail' match.tournament.id %}">{{ match.tournament.name }}</a></p>
-            <p><strong>Даты:</strong> с {{ match.tournament.start_date }} по {{ match.tournament.end_date }}</p>
-                {% else %}
-            <p><em>Матч не привязан к турниру</em></p>
-                {% endif %}
-
+        <p><strong>Даты:</strong> с {{ match.tournament.start_date }} по {{ match.tournament.end_date }}</p>
+        {% else %}
+    <p><em>Матч не привязан к турниру</em></p>
+{% endif %}
     <p><a href="{% url 'admin:matches_match_change' match.id %}">Редактировать в админке</a></p>
 </body>
 </html>
