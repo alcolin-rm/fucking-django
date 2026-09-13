@@ -45,5 +45,6 @@
     {% else %}
         <p>В этом турнире пока нет матчей.</p>
     {% endif %}
+    <a href="{% url 'matches:tournament_edit' tournament.id %}">Редактировать турнир</a>
 </body>
 </html>

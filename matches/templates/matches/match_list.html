@@ -17,7 +17,11 @@
         <a href="{% url 'matches:matches_future' %}">Будущие</a> |
         <a href="{% url 'matches:tournaments_list' %}">Турниры</a>
     </nav>
-
+    <a href="{% url 'matches:match_create' %}">+ Создать матч</a>
+    <td>
+        <a href="{% url 'matches:match_detail' match.id %}">Подробнее</a> |
+        <a href="{% url 'matches:match_edit' match.id %}">Редактировать</a>
+    </td>
     {% if matches %}
         <table>
             <thead>

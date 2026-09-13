@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ title }}</title>
+</head>
+<body>
+    <h1>{{ title }}</h1>
+    <nav>
+        <a href="{% url 'matches:matches_list' %}">Все матчи</a> |
+        <a href="{% url 'matches:tournaments_list' %}">Турниры</a>
+    </nav>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">
+            {% if action == 'create' %}Создать{% else %}Сохранить{% endif %}
+        </button>
+        {% if action == 'edit' %}
+            <a href="{% url 'matches:tournament_detail' tournament.id %}">Отмена</a>
+        {% else %}
+            <a href="{% url 'matches:tournaments_list' %}">Отмена</a>
+        {% endif %}
+    </form>
+
+    {% if form.errors %}
+        <div style="color: red;">
+            <strong>Ошибки:</strong>
+            <ul>
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        <li>{{ field }}: {{ error }}</li>
+                    {% endfor %}
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+</body>
+</html>
