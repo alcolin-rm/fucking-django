@@ -2,7 +2,6 @@
 <html>
 <head>
     <title>Матч {{ match.team1 }} vs {{ match.team2 }}</title>
-    <a href="{% url 'matches:match_edit' match.id %}">Редактировать матч</a>
 </head>
 <body>
     <h1>{{ match.team1 }} – {{ match.team2 }}</h1>
@@ -11,15 +10,29 @@
     <p><strong>Окончание:</strong> {{ match.end_time|default:"не указано" }}</p>
     <p><strong>Счёт:</strong> {{ match.score1 }} : {{ match.score2 }}</p>
     <p><strong>Победитель:</strong> {{ match.winner|default:"ещё не определён" }}</p>
-    
+
     {% if match.tournament %}
-    <hr>
+        <hr>
         <h2>Турнир</h2>
-        <p><strong>Название:</strong> <a href="{% url 'matches:tournament_detail' match.tournament.id %}">{{ match.tournament.name }}</a></p>
+        <p>
+            <strong>Название:</strong>
+            <a href="{% url 'matches:tournament_detail' match.tournament.id %}">
+                {{ match.tournament.name }}
+            </a>
+        </p>
         <p><strong>Даты:</strong> с {{ match.tournament.start_date }} по {{ match.tournament.end_date }}</p>
-        {% else %}
-    <p><em>Матч не привязан к турниру</em></p>
-{% endif %}
-    <p><a href="{% url 'admin:matches_match_change' match.id %}">Редактировать в админке</a></p>
+    {% else %}
+        <p><em>Матч не привязан к турниру</em></p>
+    {% endif %}
+
+    {% if user.is_staff %}
+        <hr>
+        <p>
+            <a href="{% url 'matches:match_edit' match.id %}">✎ Редактировать</a> |
+            <a href="{% url 'matches:match_delete' match.id %}" style="color: red;">✖ Удалить</a>
+        </p>
+    {% endif %}
+
+    <p><a href="{% url 'matches:matches_list' %}">← Назад к списку матчей</a></p>
 </body>
 </html>

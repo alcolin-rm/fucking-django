@@ -12,6 +12,10 @@
         <a href="{% url 'matches:tournaments_list' %}">Турниры</a>
     </nav>
 
+    {% if user.is_staff %}
+        <p><a href="{% url 'matches:tournament_create' %}">+ Создать турнир</a></p>
+    {% endif %}
+
     {% if tournaments %}
         <ul>
             {% for tournament in tournaments %}
@@ -20,6 +24,10 @@
                         {{ tournament.name }}
                     </a>
                     (завершённых матчей: {{ tournament.finished_matches }})
+                    {% if user.is_staff %}
+                        | <a href="{% url 'matches:tournament_edit' tournament.id %}">Редактировать</a>
+                        | <a href="{% url 'matches:tournament_delete' tournament.id %}" style="color: red;">Удалить</a>
+                    {% endif %}
                 </li>
             {% endfor %}
         </ul>

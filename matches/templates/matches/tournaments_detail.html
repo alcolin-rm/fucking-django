@@ -14,6 +14,13 @@
     <p><strong>Дата окончания:</strong> {{ tournament.end_date }}</p>
     <p><a href="{% url 'matches:tournaments_list' %}">← Назад к списку турниров</a></p>
 
+    {% if user.is_staff %}
+        <p>
+            <a href="{% url 'matches:tournament_edit' tournament.id %}">✎ Редактировать турнир</a> |
+            <a href="{% url 'matches:tournament_delete' tournament.id %}" style="color: red;">✖ Удалить турнир</a>
+        </p>
+    {% endif %}
+
     <h2>Матчи турнира ({{ matches|length }})</h2>
     {% if matches %}
         <table>
@@ -25,7 +32,7 @@
                     <th>Команда 2</th>
                     <th>Счёт</th>
                     <th>Победитель</th>
-                    <th>Детали</th>
+                    <th>Действия</th>
                 </tr>
             </thead>
             <tbody>
@@ -37,7 +44,13 @@
                         <td>{{ match.team2 }}</td>
                         <td>{{ match.score1 }} : {{ match.score2 }}</td>
                         <td>{{ match.winner|default:"—" }}</td>
-                        <td><a href="{% url 'matches:match_detail' match.id %}">Подробнее</a></td>
+                        <td>
+                            <a href="{% url 'matches:match_detail' match.id %}">Просмотр</a>
+                            {% if user.is_staff %}
+                                | <a href="{% url 'matches:match_edit' match.id %}">Редактировать</a>
+                                | <a href="{% url 'matches:match_delete' match.id %}" style="color: red;">Удалить</a>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
@@ -45,6 +58,5 @@
     {% else %}
         <p>В этом турнире пока нет матчей.</p>
     {% endif %}
-    <a href="{% url 'matches:tournament_edit' tournament.id %}">Редактировать турнир</a>
 </body>
 </html>

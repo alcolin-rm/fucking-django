@@ -6,7 +6,6 @@
         table { border-collapse: collapse; width: 100%; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
         th { background-color: #f2f2f2; }
-        .live { background-color: #d4edda; } /* зелёный фон для живых матчей (опционально) */
     </style>
 </head>
 <body>
@@ -17,11 +16,11 @@
         <a href="{% url 'matches:matches_future' %}">Будущие</a> |
         <a href="{% url 'matches:tournaments_list' %}">Турниры</a>
     </nav>
-    <a href="{% url 'matches:match_create' %}">+ Создать матч</a>
-    <td>
-        <a href="{% url 'matches:match_detail' match.id %}">Подробнее</a> |
-        <a href="{% url 'matches:match_edit' match.id %}">Редактировать</a>
-    </td>
+
+    {% if user.is_staff %}
+        <p><a href="{% url 'matches:match_create' %}">+ Создать матч</a></p>
+    {% endif %}
+
     {% if matches %}
         <table>
             <thead>
@@ -32,16 +31,8 @@
                     <th>Локация</th>
                     <th>Начало</th>
                     <th>Окончание</th>
-                    <td>
-                    {% if match.tournament %}
-                        <a href="{% url 'matches:tournament_detail' match.tournament.id %}">
-                            {{ match.tournament.name }}
-                        </a>
-                        {% else %}
-                        —
-                        {% endif %}
-                    </td>
-                    <th>Детали</th>
+                    <th>Турнир</th>
+                    <th>Действия</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,22 +44,22 @@
                         <td>{{ match.location }}</td>
                         <td>{{ match.start_time|date:"d.m.Y H:i"|default:"—" }}</td>
                         <td>{{ match.end_time|date:"d.m.Y H:i"|default:"—" }}</td>
-                        <td>{{ match.tournament.name|default:"—" }}</td>
-                        <td><a href="{% url 'matches:match_detail' match.id %}">Подробнее</a></td>
-                        {% if match.tournament %}
-                            <a href="{% url 'matches:tournament_detail' match.tournament.id %}">
-                            {{ match.tournament.name }}
-                        </a>
-                        {% else %}
-                —
-            {% endif %}
-        </td>
-        <td><a href="{% url 'matches:match_detail' match.id %}">Подробнее</a></td>
-    </tr>
-{% endfor %}
-                    
-                    
-                    
+                        <td>
+                            {% if match.tournament %}
+                                <a href="{% url 'matches:tournament_detail' match.tournament.id %}">
+                                    {{ match.tournament.name }}
+                                </a>
+                            {% else %}
+                                —
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{% url 'matches:match_detail' match.id %}">Просмотр</a>
+                            {% if user.is_staff %}
+                                | <a href="{% url 'matches:match_edit' match.id %}">Редактировать</a>
+                                | <a href="{% url 'matches:match_delete' match.id %}" style="color: red;">Удалить</a>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% endfor %}
             </tbody>
