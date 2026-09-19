@@ -7,10 +7,7 @@
     <script src="{% static 'js/delete.js' %}" defer></script>
 </head>
 <body>
-    <nav>
-        <a href="{% url 'matches:matches_list' %}">Все матчи</a>
-        <a href="{% url 'matches:tournaments_list' %}">Турниры</a>
-    </nav>
+    {% include 'matches/_header.html' %}
 
     <h1>{{ tournament.name }}</h1>
 

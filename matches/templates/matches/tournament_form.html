@@ -6,14 +6,10 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
+    {% include 'matches/_header.html' %}
     <h1>{{ title }}</h1>
 
-    <nav>
-        <a href="{% url 'matches:matches_list' %}">Все матчи</a>
-        <a href="{% url 'matches:matches_live' %}">Live</a>
-        <a href="{% url 'matches:matches_future' %}">Будущие</a>
-        <a href="{% url 'matches:tournaments_list' %}">Турниры</a>
-    </nav>
+     
 
     <form method="post">
         {% csrf_token %}

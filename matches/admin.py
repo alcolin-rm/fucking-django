@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Match, Player, SportTournament
+from .models import Match, Player, SportTournament, Profile
 
 @admin.register(Match)
 class MatchAdmin(admin.ModelAdmin):
@@ -16,3 +16,8 @@ class PlayerAdmin(admin.ModelAdmin):
 class SportTournamentAdmin(admin.ModelAdmin):
     list_display = ('name', 'start_date', 'end_date')
     search_fields = ('name',)
+
+@admin.register(Profile)
+class ProfileAdmin(admin.ModelAdmin):
+    list_display = ('user', 'avatar')
+    search_fields = ('user__username',)

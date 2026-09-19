@@ -1,0 +1,22 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Вход</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    {% include 'matches/_header.html' %}
+
+    <h1>Вход</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <p>
+            <button type="submit" class="btn btn-primary">Войти</button>
+            <a class="btn" href="{% url 'accounts:register' %}">Регистрация</a>
+        </p>
+    </form>
+</body>
+</html>

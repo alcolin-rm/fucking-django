@@ -1,4 +1,8 @@
 from django.db import models
+from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 class Player(models.Model):
     """
@@ -59,3 +63,35 @@ class Match(models.Model):
     class Meta:
         verbose_name = "Матч"
         verbose_name_plural = "Матчи"
+
+
+class Profile(models.Model):
+    user = models.OneToOneField(
+        User,
+        on_delete=models.CASCADE,
+        related_name='profile',
+        verbose_name='Пользователь',
+    )
+    avatar = models.ImageField(
+        upload_to='avatars/',
+        blank=True,
+        null=True,
+        verbose_name='Аватар',
+    )
+
+    def __str__(self):
+        return f'Профиль {self.user.username}'
+
+    class Meta:
+        verbose_name = 'Профиль'
+        verbose_name_plural = 'Профили'
+
+
+# Автоматически создаём/обновляем профиль при сохранении User
+@receiver(post_save, sender=User)
+def create_or_update_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(user=instance)
+    else:
+        # На случай, если профиль почему-то отсутствует
+        Profile.objects.get_or_create(user=instance)

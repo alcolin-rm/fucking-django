@@ -1,0 +1,32 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    {% include 'matches/_header.html' %}
+
+    <h1>Регистрация</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {% if form.non_field_errors %}
+            <ul class="errorlist">
+                {% for error in form.non_field_errors %}<li>{{ error }}</li>{% endfor %}
+            </ul>
+        {% endif %}
+
+        {{ form.as_p }}
+
+        <p>
+            <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+            <a class="btn" href="{% url 'matches:matches_list' %}">Отмена</a>
+        </p>
+    </form>
+
+    <p>Уже есть аккаунт? <a href="{% url 'accounts:login' %}">Войти</a></p>
+</body>
+</html>

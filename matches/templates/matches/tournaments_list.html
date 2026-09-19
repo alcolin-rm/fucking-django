@@ -8,12 +8,7 @@
 </head>
 <body>
     <h1>Список турниров</h1>
-    <nav>
-        <a href="{% url 'matches:matches_list' %}">Все матчи</a>
-        <a href="{% url 'matches:matches_live' %}">Live</a>
-        <a href="{% url 'matches:matches_future' %}">Будущие</a>
-        <a href="{% url 'matches:tournaments_list' %}">Турниры</a>
-    </nav>
+    {% include 'matches/_header.html' %}
 
     {% if user.is_staff %}
         <p><a class="btn btn-primary" href="{% url 'matches:tournament_create' %}">+ Создать турнир</a></p>
