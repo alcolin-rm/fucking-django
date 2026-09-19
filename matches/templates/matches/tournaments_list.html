@@ -1,19 +1,22 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
     <title>Турниры</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/delete.js' %}" defer></script>
 </head>
 <body>
     <h1>Список турниров</h1>
     <nav>
-        <a href="{% url 'matches:matches_list' %}">Все матчи</a> |
-        <a href="{% url 'matches:matches_live' %}">Live</a> |
-        <a href="{% url 'matches:matches_future' %}">Будущие</a> |
+        <a href="{% url 'matches:matches_list' %}">Все матчи</a>
+        <a href="{% url 'matches:matches_live' %}">Live</a>
+        <a href="{% url 'matches:matches_future' %}">Будущие</a>
         <a href="{% url 'matches:tournaments_list' %}">Турниры</a>
     </nav>
 
     {% if user.is_staff %}
-        <p><a href="{% url 'matches:tournament_create' %}">+ Создать турнир</a></p>
+        <p><a class="btn btn-primary" href="{% url 'matches:tournament_create' %}">+ Создать турнир</a></p>
     {% endif %}
 
     {% if tournaments %}
@@ -25,8 +28,13 @@
                     </a>
                     (завершённых матчей: {{ tournament.finished_matches }})
                     {% if user.is_staff %}
-                        | <a href="{% url 'matches:tournament_edit' tournament.id %}">Редактировать</a>
-                        | <a href="{% url 'matches:tournament_delete' tournament.id %}" style="color: red;">Удалить</a>
+                        <a class="btn btn-small" href="{% url 'matches:tournament_edit' tournament.id %}">Редактировать</a>
+                        <button class="btn btn-small btn-danger delete-btn"
+                                data-url="{% url 'matches:tournament_delete' tournament.id %}"
+                                data-redirect="{% url 'matches:tournaments_list' %}"
+                                data-confirm="Удалить турнир «{{ tournament.name }}»?">
+                            Удалить
+                        </button>
                     {% endif %}
                 </li>
             {% endfor %}

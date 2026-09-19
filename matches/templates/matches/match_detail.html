@@ -1,10 +1,21 @@
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Матч {{ match.team1 }} vs {{ match.team2 }}</title>
+    <title>Матч {{ match.team1 }} – {{ match.team2 }}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
+    <nav>
+        <a href="{% url 'matches:matches_list' %}">Все матчи</a>
+        <a href="{% url 'matches:tournaments_list' %}">Турниры</a>
+    </nav>
+
     <h1>{{ match.team1 }} – {{ match.team2 }}</h1>
+
+    {% cycle 'img/match1.svg' 'img/match2.svg' 'img/match3.svg' 'img/match4.svg' as match_img silent %}
+    <img class="tournament-img" src="{% static match_img %}" alt="Матч">
+
     <p><strong>Локация:</strong> {{ match.location }}</p>
     <p><strong>Начало:</strong> {{ match.start_time|default:"не указано" }}</p>
     <p><strong>Окончание:</strong> {{ match.end_time|default:"не указано" }}</p>
@@ -28,11 +39,9 @@
     {% if user.is_staff %}
         <hr>
         <p>
-            <a href="{% url 'matches:match_edit' match.id %}">✎ Редактировать</a> |
-            <a href="{% url 'matches:match_delete' match.id %}" style="color: red;">✖ Удалить</a>
+            <a class="btn" href="{% url 'matches:match_edit' match.id %}">✎ Редактировать</a>
+            <a class="btn btn-danger" href="{% url 'matches:match_delete' match.id %}">✖ Удалить</a>
         </p>
     {% endif %}
-
-    <p><a href="{% url 'matches:matches_list' %}">← Назад к списку матчей</a></p>
 </body>
 </html>

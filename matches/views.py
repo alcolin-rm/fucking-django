@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.utils import timezone
 from django.db.models import Q, Count
 from django.contrib.auth.decorators import user_passes_test
+from django.http import JsonResponse
 
 from .models import Match, SportTournament
 from .forms import MatchForm, SportTournamentForm
@@ -124,6 +125,8 @@ def match_delete(request, id):
     match = get_object_or_404(Match, id=id)
     if request.method == 'POST':
         match.delete()
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'status': 'ok'})
         return redirect('matches:matches_list')
     return render(request, 'matches/match_confirm_delete.html', {'match': match})
 
@@ -164,11 +167,14 @@ def tournament_edit(request, id):
     })
 
 
+
 @admin_required
 def tournament_delete(request, id):
     tournament = get_object_or_404(SportTournament, id=id)
     if request.method == 'POST':
         tournament.delete()
+        if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+            return JsonResponse({'status': 'ok'})
         return redirect('matches:tournaments_list')
     return render(request, 'matches/tournament_confirm_delete.html', {
         'tournament': tournament,
